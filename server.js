@@ -4,6 +4,7 @@ const cors = require("cors");
 const { google } = require("googleapis");
 const app = express();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
 app.use(cors());
@@ -78,7 +79,14 @@ app.post('/login', async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, hashedPassword);
 
     if (isPasswordValid) {
-      res.status(200).send({ message: 'Login successful' });
+      // If login is successful, generate a JWT token
+  const token = jwt.sign(
+    { email: user }, // Payload
+    JWT_SECRET,             // Secret key
+    { expiresIn: '1h' }     // Expiration time (1 hour)
+  );
+
+      res.status(200).send({ message: 'Login successful', token });
     } else {
       res.status(400).send({ message: 'Invalid password' });
     }
@@ -129,17 +137,32 @@ app.post('/signup', async (req, res) => {
   // Endpoint to fetch data from Google Sheets
   app.get("/data", async (req, res) => {
     try {
+      const token = req.headers['authorization'];
       const response = await sheets.spreadsheets.values.get({
         spreadsheetId: SHEET_ID,
         range: "BasicInfo!A:C", // Adjust the range as needed (e.g., A:C for the first three columns)
       });
-  
-      const rows = response.data.values;
-      if (rows.length) {
-        res.status(200).json(rows); // Send rows data as JSON
-      } else {
-        res.status(404).send("No data found in the sheet.");
-      }
+  if (!token) {
+    return res.status(401).send({ message: 'No token provided' });
+  }
+
+  // Verify the JWT token
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: 'Invalid or expired token' });
+    }
+    
+
+    const rows = response.data.values;
+    if (rows.length) {
+      res.status(200).json(rows); // Send rows data as JSON
+    } else {
+      res.status(404).send("No data found in the sheet.");
+    }
+    // Token is valid, proceed with the protected route logic
+    //res.status(200).send({ message: 'Welcome to the dashboard', user: decoded });
+  });
+      
     } catch (error) {
       console.error("Error retrieving data from sheet:", error);
       res.status(500).send("Error retrieving data from Google Sheets");
