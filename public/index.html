@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="calculator bg-white p-6 rounded-lg shadow-lg">
+        <input type="text" class="calculator-screen w-full h-12 mb-4 p-2 text-right text-xl bg-gray-200 rounded" id="calculator-screen" disabled />
+        
+        <div class="calculator-keys grid grid-cols-4 gap-2">
+            <button type="button" class="operator bg-indigo-500 text-white p-4 rounded" value="+">+</button>
+            <button type="button" class="operator bg-indigo-500 text-white p-4 rounded" value="-">-</button>
+            <button type="button" class="operator bg-indigo-500 text-white p-4 rounded" value="*">&times;</button>
+            <button type="button" class="operator bg-indigo-500 text-white p-4 rounded" value="/">&divide;</button>
+
+            <button type="button" class="bg-gray-300 p-4 rounded" value="7">7</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="8">8</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="9">9</button>
+
+            <button type="button" class="bg-gray-300 p-4 rounded" value="4">4</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="5">5</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="6">6</button>
+
+            <button type="button" class="bg-gray-300 p-4 rounded" value="1">1</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="2">2</button>
+            <button type="button" class="bg-gray-300 p-4 rounded" value="3">3</button>
+
+            <button type="button" class="bg-gray-300 p-4 rounded" value="0">0</button>
+            <button type="button" class="decimal bg-gray-300 p-4 rounded" value=".">.</button>
+            <button type="button" class="all-clear bg-red-500 text-white p-4 rounded" value="all-clear">AC</button>
+
+            <button type="button" class="equal-sign bg-green-500 text-white p-4 col-span-2 rounded" value="=">=</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
